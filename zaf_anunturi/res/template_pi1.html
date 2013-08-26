@@ -1,0 +1,684 @@
+<!--###FORM_ADAUGARE###-->
+<script src="/typo3conf/ext/zaf_anunturi/pi1/editor/ckeditor.js"></script>
+<style>
+#cke_text_anunt {
+	margin-left: 164px !important; 
+    width: 660px !important;
+}
+</style>
+<script type="text/javascript">
+function postAjaxData(inpVal){
+	var params = "theVal="+inpVal;
+	$.ajax({type: "POST", url:"###ACTION###", 
+		data: params ,
+		success: function(msg){
+			procesResult(msg);
+			$('.selectpicker').selectpicker('render');
+			$('.selectpicker').selectpicker('refresh');
+		},
+		error: function(){failedRequest();}
+	});
+}
+
+function procesResult(msg){
+	//alert(msg);
+	$('#localitate').html(msg);
+}
+
+function failedRequest() {
+}
+
+
+$(window).on('load', function () {
+	
+});
+
+
+
+//start validations
+$(document).ready(function() {	
+	
+	$('.selectpicker').selectpicker({
+    });
+	
+	var isEditId = $('#edit_id').val();
+	
+	if (isEditId != '') {
+		$('.termeni').remove();
+		$('.captcha').remove();
+	}
+	else {
+		$('.poze_form2.clearfix').remove();
+	}
+	
+	function deleteImage() {
+		
+		//$('.lnk a').click(function(e){
+		$(document).on('click', '.lnk a', function(e){	
+		
+			e.preventDefault();
+			
+			var imageToDelete = $(this).attr('data-image');
+			
+			data = 'tx_zafanunturi_pi1[delete]='+imageToDelete;
+			$.ajax({type: "GET", url:"###AJAX_URL###", 
+				data: data,
+				success: function(msg){
+					repopulateImages(msg,'');			
+					//deleteImage();				
+				},
+				error: function(){failedRequest();}
+			});
+			
+		});
+	}
+	
+	deleteImage();
+	
+	$(function() {
+		 $( "#sortable" ).sortable({
+		    	connectWith: "ul",
+		    	cursor: 'move',	
+				stop: function( event, ui ) {
+						reorderImagesList();
+				},
+				placeholder: "ui-state-highlight"
+		    });
+		 
+		 $( "#sortable" ).disableSelection();
+	});
+	
+	
+	function reorderImagesList() {
+		var lst = $('#sortable').children();
+		var counter = 0;
+		var newArr = new Array();
+			
+		$.each(lst, function(k,v){
+			newArr[counter] = $(v).attr('data-original-name');
+			counter++;
+		});
+		
+		var newList = my_implode_js(',',newArr);
+		//alert(newList);
+		$('#new_images').val(newList);
+	}
+	
+	function my_implode_js(separator,arr){
+	       var temp = '';
+	       for(var i=0;i<arr.length;i++){
+	           temp +=  arr[i] 
+	           if(i!=arr.length-1){
+	                temp += separator  ; 
+	           }
+	       }//end of the for loop
+
+	       return temp;
+	}
+	
+	
+	$(".file2").pekeUpload({theme:'bootstrap',
+        onFileSuccess:function(file,data){
+        	//console.log(file.name)
+          setTimeout(function(){
+              $('.file').fadeOut('slow', function(){
+              	$('.file').remove();
+              	var tmp = file.name;
+              	var fl = tmp.replace(/[_\W]+/g, "");
+              	//fl = fl.replace(/[::space::]/,'-');
+              	//alert(fl);
+
+              	url = '###AJAX_URL###';
+					data = 'tx_zafanunturi_pi1[repopulate]=1';
+				
+					$.ajax({
+						  type: "GET",
+						  url: url,
+						  data: data,
+						  success: function(response) {
+							  repopulateImages(response,fl)
+						  }, 			  
+						  dataType: 'text'
+						});				
+              	
+              	                	
+              	
+              });
+          },800);	
+       },
+       onFileError:function(){
+    	 setTimeout(function(){
+    		 $('.alert.alert-error').fadeOut('slow');
+    		 $('.alert.alert-error').remove();
+    	 },3000);  
+       },
+       multi:true, allowedExtensions:"jpg|jpeg|png|gif", url:"###AJAX_URL###", field:'tx_zafanunturi_pi1[images][]'});
+	
+	function repopulateImages(response,fl) {
+		$('#sortable').html(response);
+		reorderImagesList();
+	}
+	
+	$("#titlu").blur(function(){
+		var thtml = $("#titlu").val(); 
+		thtml = thtml.toLowerCase();
+		
+		if(thtml == ''){
+			$("#titlu_error").html('Introduceti titlul');
+			$("#titlu_error").attr('class', 'errorInp redSpot');
+		}
+		else if(thtml.length > 60) {
+			$("#titlu_error").html('Titlul nu trebuie sa depaseasca 60 de caractere');
+			$("#titlu_error").attr('class', 'errorInp redSpot');
+		}
+		else {
+			$("#titlu_error").html('&nbsp;&nbsp;&nbsp;');
+			$("#titlu_error").attr('class','errorInp greenSpot');
+		}
+		if (thtml.search(/vand|urgent|schimb/) != -1){
+			$("#titlu_error").html('Nu aveti voie sa folositi: "vand, urgent, schimb"');
+			$("#titlu_error").attr('class', 'errorInp redSpot');
+		}
+	});
+	
+	//$("#categorie").change(function(){
+	$(document).on('change', '#categorie',function() {	
+	
+		var categTxt = $("#categorie").val(); 
+		
+		if(categTxt == '0'){
+			$("#categorie_error").html('Alegeti o categorie');
+			$("#categorie_error").attr('class', 'errorInp redSpot');
+		}
+
+		else {
+			$("#categorie_error").html('&nbsp;&nbsp;&nbsp;');
+			$("#categorie_error").attr('class','errorInp greenSpot');
+		}
+	});
+	
+	$("#tip_anunt").change(function(){
+		var categTxt = $("#tip_anunt").val(); 
+		
+		if(categTxt == '0'){
+			$("#tip_anunt_error").html('Alegeti tipul anuntului');
+			$("#tip_anunt_error").attr('class', 'errorInp redSpot');
+		}
+
+		else {
+			$("#tip_anunt_error").html('&nbsp;&nbsp;&nbsp;');
+			$("#tip_anunt_error").attr('class','errorInp greenSpot');
+		}
+	});	
+	
+	
+	$("#judet").change(function(){
+		var categTxt = $("#judet").val(); 
+		
+		if(categTxt == ''){
+			$("#judet_error").html('Alegeti un judet');
+			$("#judet_error").attr('class', 'errorInp redSpot');
+		}
+
+		else {
+			$("#judet_error").html('&nbsp;&nbsp;&nbsp;');
+			$("#judet_error").attr('class','errorInp greenSpot');
+		}
+	});	
+	
+	$("#localitate").change(function(){
+		var categTxt = $("#localitate").val(); 
+		
+		if(categTxt == '0'){
+			$("#localitate_error").html('Alegeti o localitate');
+			$("#localitate_error").attr('class', 'errorInp redSpot');
+		}
+
+		else {
+			$("#localitate_error").html('&nbsp;&nbsp;&nbsp;');
+			$("#localitate_error").attr('class','errorInp greenSpot');
+		}
+	});	
+	
+	$("#pret").blur(function(){
+		var pretV = $("#pret").val(); 
+		
+		if(pretV == ''){
+			$("#pret_error").html('Introduceti pretul');
+			$("#pret_error").attr('class', 'errorInp redSpot');
+		}
+		else if(!pretV.match('^(0|[1-9][0-9]*)$')) {
+			$("#pret_error").html('Introduceti numai cifre');
+			$("#pret_error").attr('class', 'errorInp redSpot');
+		}
+		else {
+			$("#pret_error").html('&nbsp;&nbsp;&nbsp;');
+			$("#pret_error").attr('class','errorInp greenSpot');
+		}
+	});	
+	
+	/*
+	$("#text_anunt").blur(function(){
+		var txtV = $("#text_anunt").val(); 
+		
+		if(txtV == ''){
+			$("#text_error").html('Introduceti textul anuntului');
+			$("#text_error").attr('class', 'errorInp redSpot');
+		}
+		else if($.trim(txtV).split(" ").length < 11) {
+			$("#text_error").html('Introduceti cel putin 10 cuvinte');
+			$("#text_error").attr('class', 'errorInp redSpot');
+		}
+		else {
+			$("#text_error").html('&nbsp;&nbsp;&nbsp;');
+			$("#text_error").attr('class','errorInp greenSpot');
+		}
+	});	
+	*/
+	
+	$("#nume").blur(function(){
+		var thtml = $("#nume").val(); 
+		
+		if(thtml == ''){
+			$("#nume_error").html('Introduceti numele');
+			$("#nume_error").attr('class', 'errorInp redSpot');
+		}		
+		else {
+			$("#nume_error").html('&nbsp;&nbsp;&nbsp;');
+			$("#nume_error").attr('class','errorInp greenSpot');
+		}
+	});	
+	
+	if(isEditId == '') {
+		$("#captcha").blur(function(){
+			var thtml = $("#captcha").val(); 
+			
+			if(thtml == ''){
+				$("#captcha_error").html('Introduceti codul de securitate');
+				$("#captcha_error").attr('class', 'errorInp redSpot');
+			}		
+			else {
+				$("#captcha_error").html('&nbsp;&nbsp;&nbsp;');
+				$("#captcha_error").attr('class','errorInp greenSpot');
+			}
+		});	
+	}
+	
+	$("#email").blur(function(){
+		var emlAdr = $("#email").val();
+		var pattern = new RegExp(/^[+a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i);
+		
+		if(emlAdr == ''){
+			$("#email_error").html('Introduceti adresa de email');
+			$("#email_error").attr('class', 'errorInp redSpot');
+		}
+		else if(pattern.test(emlAdr) == false) {
+			$("#email_error").html('Introduceti o adresa valida de email');
+			$("#email_error").attr('class', 'errorInp redSpot');
+		}
+		else {
+			$("#email_error").html('&nbsp;&nbsp;&nbsp;');
+			$("#email_error").attr('class','errorInp greenSpot');
+		}
+	});	
+	
+	$("#telefon").blur(function(){
+		var pretV = $("#telefon").val(); 
+		
+		if(pretV == ''){
+			$("#telefon_error").html('Introduceti numarul de telefon');
+			$("#telefon_error").attr('class', 'errorInp redSpot');
+		}
+		else if(!pretV.match('^(0|[0-9][0-9]*)$')) {
+			$("#telefon_error").html('Introduceti numai cifre');
+			$("#telefon_error").attr('class', 'errorInp redSpot');
+		}
+		else {
+			$("#telefon_error").html('&nbsp;&nbsp;&nbsp;');
+			$("#telefon_error").attr('class','errorInp greenSpot');
+		}
+	});
+	
+	if(isEditId == '') {
+		$("#termeni").click(function(){
+			if($('#termeni').is(':checked') == false){
+				$("#termeni_error").html('Trebuie sa fiti deacord cu termenii si conditiile');
+				$("#termeni_error").attr('class', 'errorInp redSpot');
+				validity = false;
+			}
+			else {
+				$("#termeni_error").html('&nbsp;&nbsp;&nbsp;');
+				$("#termeni_error").attr('class','errorInp greenSpot');
+			}
+		});
+	}
+ 
+	$('#theForm').submit(function() {
+		var validity = true;
+		
+		//validate titlu
+		var thtml = $("#titlu").val();
+		thtml = thtml.toLowerCase();
+		if(thtml == ''){
+			$("#titlu_error").html('Introduceti titlul');
+			$("#titlu_error").attr('class', 'errorInp redSpot');
+			validity = false;
+		}
+		else if(thtml.length > 60) {
+			$("#titlu_error").html('Titlul nu trebuie sa depaseasca 60 de caractere');
+			$("#titlu_error").attr('class', 'errorInp redSpot');
+			validity = false;
+		}
+		else if (thtml.search(/vand|urgent|schimb/) != -1){
+			$("#titlu_error").html('Nu aveti voie sa folositi: "vand, urgent, schimb"');
+			$("#titlu_error").attr('class', 'errorInp redSpot');
+			validity = false;
+		}
+		else {
+			$("#titlu_error").html('&nbsp;&nbsp;&nbsp;');
+			$("#titlu_error").attr('class','errorInp greenSpot');
+		}
+		
+		//validate categorie
+		var categTxt = $("#categorie").val(); 	
+		if(categTxt == '0'){
+			$("#categorie_error").html('Alegeti o categorie');
+			$("#categorie_error").attr('class', 'errorInp redSpot');
+			validity = false;
+		}
+		else {
+			$("#categorie_error").html('&nbsp;&nbsp;&nbsp;');
+			$("#categorie_error").attr('class','errorInp greenSpot');
+		}
+		
+		//validate tip anunt
+		var categTxt = $("#tip_anunt").val(); 
+		if(categTxt == '0'){
+			$("#tip_anunt_error").html('Alegeti tipul anuntului');
+			$("#tip_anunt_error").attr('class', 'errorInp redSpot');
+			validity = false;
+		}
+		else {
+			$("#tip_anunt_error").html('&nbsp;&nbsp;&nbsp;');
+			$("#tip_anunt_error").attr('class','errorInp greenSpot');
+		}
+		
+		//validate judet
+		var categTxt = $("#judet").val(); 		
+		if(categTxt == ''){
+			$("#judet_error").html('Alegeti un judet');
+			$("#judet_error").attr('class', 'errorInp redSpot');
+			validity = false;
+		}
+		else {
+			$("#judet_error").html('&nbsp;&nbsp;&nbsp;');
+			$("#judet_error").attr('class','errorInp greenSpot');
+		}
+		
+		
+		//localitate
+		var categTxt = $("#localitate").val(); 		
+		if(categTxt == '0'){
+			$("#localitate_error").html('Alegeti o localitate');
+			$("#localitate_error").attr('class', 'errorInp redSpot');
+			validity = false;
+		}
+		else {
+			$("#localitate_error").html('&nbsp;&nbsp;&nbsp;');
+			$("#localitate_error").attr('class','errorInp greenSpot');
+		}
+		
+		//validate pret
+		var pretV = $("#pret").val(); 		
+		if(pretV == ''){
+			$("#pret_error").html('Introduceti pretul');
+			$("#pret_error").attr('class', 'errorInp redSpot');
+			validity = false;
+		}
+		else if(!pretV.match('^(0|[1-9][0-9]*)$')) {
+			$("#pret_error").html('Introduceti numai cifre');
+			$("#pret_error").attr('class', 'errorInp redSpot');
+			validity = false;
+		}
+		else {
+			$("#pret_error").html('&nbsp;&nbsp;&nbsp;');
+			$("#pret_error").attr('class','errorInp greenSpot');
+		}
+		
+		//validate text anunt
+		/*
+		var txtV = $("#text_anunt").val(); 		
+		if(txtV == ''){
+			$("#text_error").html('Introduceti textul anuntului');
+			$("#text_error").attr('class', 'errorInp redSpot');
+			validity = false;
+		}
+		else if($.trim(txtV).split(" ").length < 11) {
+			$("#text_error").html('Introduceti cel putin 10 cuvinte');
+			$("#text_error").attr('class', 'errorInp redSpot');
+			validity = false;
+		}
+		else {
+			$("#text_error").html('&nbsp;&nbsp;&nbsp;');
+			$("#text_error").attr('class','errorInp greenSpot');
+		}
+		*/
+		
+		//validate nume
+		var thtml = $("#nume").val(); 		
+		if(thtml == ''){
+			$("#nume_error").html('Introduceti numele');
+			$("#nume_error").attr('class', 'errorInp redSpot');
+			validity = false;
+		}		
+		else {
+			$("#nume_error").html('&nbsp;&nbsp;&nbsp;');
+			$("#nume_error").attr('class','errorInp greenSpot');
+		}
+		
+		//validate email
+		var emlAdr = $("#email").val();
+		var pattern = new RegExp(/^[+a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i);		
+		if(emlAdr == ''){
+			$("#email_error").html('Introduceti adresa de email');
+			$("#email_error").attr('class', 'errorInp redSpot');
+			validity = false;
+		}
+		else if(pattern.test(emlAdr) == false) {
+			$("#email_error").html('Introduceti o adresa valida de email');
+			$("#email_error").attr('class', 'errorInp redSpot');
+			validity = false;
+		}
+		else {
+			$("#email_error").html('&nbsp;&nbsp;&nbsp;');
+			$("#email_error").attr('class','errorInp greenSpot');
+		}
+		
+		//validate captcha
+		if(isEditId == '') {
+			var thtml = $("#captcha").val(); 		
+			if(thtml == ''){
+				$("#captcha_error").html('Introduceti codul de securitate');
+				$("#captcha_error").attr('class', 'errorInp redSpot');
+				validity = false;
+			}		
+			else {
+				$("#captcha_error").html('&nbsp;&nbsp;&nbsp;');
+				$("#captcha_error").attr('class','errorInp greenSpot');
+			}
+		}
+		
+		//validate telefon
+		var pretV = $("#telefon").val(); 		
+		if(pretV == ''){
+			$("#telefon_error").html('Introduceti numarul de telefon');
+			$("#telefon_error").attr('class', 'errorInp redSpot');
+			validity = false;
+		}
+		else if(!pretV.match('^(0|[0-9][0-9]*)$')) {
+			$("#telefon_error").html('Introduceti numai cifre');
+			$("#telefon_error").attr('class', 'errorInp redSpot');
+			validity = false;
+		}
+		else {
+			$("#telefon_error").html('&nbsp;&nbsp;&nbsp;');
+			$("#telefon_error").attr('class','errorInp greenSpot');
+		}
+		
+		if(validity == false) {		
+			$('html, body').animate({
+	            scrollTop: $(".content").offset().top
+	        }, 1000);
+		}	
+
+		
+		if (isEditId == '') {		
+			if($('#termeni').is(':checked') == false){
+				$("#termeni_error").html('Trebuie sa fiti deacord cu termenii si conditiile');
+				$("#termeni_error").attr('class', 'errorInp redSpot');
+				validity = false;
+			}
+			else {
+				$("#termeni_error").html('&nbsp;&nbsp;&nbsp;');
+				$("#termeni_error").attr('class','errorInp greenSpot');
+			}
+		}
+		
+		 // alert('aaaa');
+		  return validity;
+	});
+	
+});
+
+</script>
+<div class="error">
+###ERROR_MESSAGE###
+</div>
+<h2>Detalii anunt</h2>
+<form action="###ACTION###" method="post" id="theForm" name="theForm" enctype="multipart/form-data">
+	<input type="hidden" name="tx_zafanunturi_pi1[submited]" value="yes" />
+	<input id="edit_id" type="hidden" name="tx_zafanunturi_pi1[edit_id]" value="###EDIT_ID###" />
+	<input id="new_images" type="hidden" name="tx_zafanunturi_pi1[new_images]" value="###NEW_IMAGES###" />
+	<div>
+		<label>Titlu</label>
+		<input type="text" name="tx_zafanunturi_pi1[titlu]" id="titlu" value="###TITLU###" /><span id="titlu_error" class="errorInp"></span>
+	</div>
+	<div>
+		<label>Categorie</label>
+		<select class="selectpicker" name="tx_zafanunturi_pi1[categorie]" id="categorie" >
+			###CATEGORII###
+		</select>
+		<span id="categorie_error" class="errorInp"></span>
+	</div>	
+	<div>
+		<label>Tip anunt</label>
+		<select class="selectpicker" name="tx_zafanunturi_pi1[tip_anunt]" id="tip_anunt">
+			###TIP_ANUNT###
+		</select>
+		<span id="tip_anunt_error" class="errorInp"></span>
+	</div>
+	<div>
+		<label>Descriere</label>
+		<textarea name="tx_zafanunturi_pi1[text_anunt]" id="text_anunt" class="ckeditor" >###TEXT_ANUNT###</textarea><span id="text_error" class="errorInp"></span>
+	</div>
+	<div class="pret">
+		<label>Pret</label>
+		<input type="text" name="tx_zafanunturi_pi1[pret]" value="###PRET###" id="pret" />
+		<select class="selectpicker" name="tx_zafanunturi_pi1[moneda]" id="moneda">
+			###MONEDE###
+		</select>
+		<span id="pret_error" class="errorInp"></span>
+	</div>
+	<div>
+		<label>Judet</label>
+		<select class="selectpicker" name="tx_zafanunturi_pi1[judet]" onchange="postAjaxData(this.value);" id="judet" >
+			###JURDETE###
+		</select>
+		<span id="judet_error" class="errorInp"></span>
+	</div>
+	<label>Localitate</label>
+	<div>
+		<select class="selectpicker" name="tx_zafanunturi_pi1[localitate]" id="localitate" id="localitate">
+			<option value="0">-- Alege --</option>
+			###LOCALITATI###
+		</select>
+		<span id="localitate_error" class="errorInp"></span>
+	</div>
+<!-- 		
+	<div>
+		<label>Valabilitate</label>
+		<select name="tx_zafanunturi_pi1[valabilitate]" >
+			###VALABILITATE###
+		</select>		
+	</div>
+-->
+	<div class="poze_form">
+		<div>
+			<label>Poza 1</label>
+			<input type="file" name="tx_zafanunturi_pi1[images][]" />
+		</div>
+		<div>	
+			<label>Poza 2</label>
+			<input type="file" name="tx_zafanunturi_pi1[images][]" />
+		</div>
+		<div>	
+			<label>Poza 3</label>
+			<input type="file" name="tx_zafanunturi_pi1[images][]" />
+		</div>
+		<div>	
+			<label>Poza 4</label>
+			<input type="file" name="tx_zafanunturi_pi1[images][]" />
+		</div>
+		<div>	
+			<label>Poza 5</label>
+			<input type="file" name="tx_zafanunturi_pi1[images][]" />
+		</div>
+		<div>	
+			<label>Poza 6</label>
+			<input type="file" name="tx_zafanunturi_pi1[images][]" />
+		</div>
+	</div>
+	<div class="poze_form2 clearfix">
+		###POZE_FORM###
+	</div>	
+<h2>Informatii persoana</h2>
+	<div>
+		<label>Nume</label>
+		<input ###READONLY### type="text" name="tx_zafanunturi_pi1[nume]" value="###NUME###" id="nume" /><span id="nume_error" class="errorInp"></span>
+	</div>	
+	<div>
+		<label>E-mail</label>
+		<input ###READONLY### type="text" name="tx_zafanunturi_pi1[email]" value="###EMAIL###" id="email" /><span id="email_error" class="errorInp"></span>
+	</div>
+	<div>
+		<label>&nbsp;</label>
+		<input type="checkbox" name="tx_zafanunturi_pi1[contactat_pe_mail]" id="noMail" />Nu vreau sa fiu contactat pe email		
+	</div>	
+	<div>
+		<label>Telefon</label>
+		<input type="text" name="tx_zafanunturi_pi1[telefon]" value="###TELEFON###" id="telefon" /><span id="telefon_error" class="errorInp"></span>
+	</div>
+	<div class="termeni">
+		<label>&nbsp;</label>
+		<input type="checkbox" name="tx_zafanunturi_pi1[termani_si_conditii]" id="termeni" />Sunt deacord cu <a href="index.php?id=34">termenii si conditiile</a>
+		<span id="termeni_error" class="errorInp"></span>		
+	</div>
+	<div class="captcha">
+		<label>Cod de securitate</label>
+		<input type="text" name="tx_zafanunturi_pi1[captchaResponse]" id="captcha" autocomplete='off' />
+		###CAPTCHA### <span id="captcha_error" class="errorInp"></span>
+	</div>
+	<div class="submitButton">		
+		<input type="submit" value="Adauga" />
+	</div>	
+</form>
+<script type="text/javascript">
+$('document').ready(function(){
+	
+	$edit_id = $('#edit_id').val();
+	if($edit_id > 0) {
+		$('.poze_form').remove();	
+	}
+});
+</script>
+<!--###FORM_ADAUGARE###-->

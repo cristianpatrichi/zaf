@@ -1,0 +1,24 @@
+<!--###FORMULAR_CAUTARE###-->
+<form class="row-fluid" method="get" action="###ACTION###">
+<input type="hidden" name="id" value="###ID###" />
+<div class="span8">
+	<input class="cauta" type="text" name="tx_zafanunturi_pi2[src_word]" />
+</div>
+<div class="span3">
+	<select class="selectpicker" name="tx_zafanunturi_pi2[id_judet]" class="filter">
+		###JUDETE###
+	</select>
+</div>
+<div class="span1">
+	<input type="submit" value="Cauta" class="search" />
+</div>
+
+<div class="clear"></div>
+</form>
+<script type="text/javascript">
+$(document).ready(function() {
+	$('.selectpicker').selectpicker({
+    });
+});	
+</script>
+<!--###FORMULAR_CAUTARE###-->

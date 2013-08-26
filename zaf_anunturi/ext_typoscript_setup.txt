@@ -1,0 +1,67 @@
+plugin.tx_zafanunturi_pi1 {
+	templateFile = typo3conf/ext/zaf_anunturi/res/template_pi1.html
+	mailToUserTemplate = typo3conf/ext/zaf_anunturi/res/mail_to_user.html	
+	from_email = admin@zaf.ro 
+	fromName = zaf.ro
+	approvePage = 29
+	subject = Confirmare postare anunt pe zaf.ro
+	mailPhotoW = 100
+	mailPhotoH = 100
+	usersPID = 16
+	thumbWidth = 100
+	thumbHeight = 100
+}
+
+plugin.tx_zafanunturi_pi2 {
+	templateFile = typo3conf/ext/zaf_anunturi/res/template_pi2.html
+	thumbWidth = 100
+	thumbHeight = 100
+	singlePID = 
+	nrLinks = 5
+	limit = 5
+}
+
+plugin.tx_zafanunturi_pi3 {
+	templateFile = typo3conf/ext/zaf_anunturi/res/template_pi3.html
+	emailTemplateFile = typo3conf/ext/zaf_anunturi/res/mail_din_formular.html
+	thumbWidth = 100
+	thumbHeight = 100
+	imgWidth = 600
+	imgHeight = 600
+	subject = Ati primit un mesaj de pe zaf.ro
+	from_email = admin@zaf.ro
+}
+
+plugin.tx_zafanunturi_pi5 {
+	from_email = admin@zaf.ro
+	adminEmail = cristian@patrichi.ro
+	approvePage = 30
+	subject = S-a adaugat un nou anunt pe zaf.ro
+	mailPhotoW = 100
+	mailPhotoH = 100
+}
+
+plugin.tx_zafanunturi_pi6 {
+	subject_approved = Anuntul dumneavoastra pe zaf.ro a fost APROBAT
+	subject_not_approved = Anuntul dumneavoastra pe zaf.ro a fost RESPINS
+	from_email = admin@zaf.ro
+}
+
+plugin.tx_zafanunturi_pi7 {
+	templateFile = typo3conf/ext/zaf_anunturi/res/template_pi7.html
+	thumbWidth = 100
+	thumbHeight = 100
+	singlePID = 
+	nrLinks = 5
+	limit = 5
+}
+
+plugin.tx_zafanunturi_pi8 {
+	templateFile = typo3conf/ext/zaf_anunturi/res/template_pi8.html
+	thumbWidth = 100
+	thumbHeight = 100
+	singlePID =
+	editPID =
+	nrLinks = 5
+	limit = 5
+}

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>module</type>
+		<description>Language labels for plugin &quot;tx_zafanunturi_pi1&quot;</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="list_mode_1">Mode 1</label>
+			<label index="list_mode_2">Mode 2</label>
+			<label index="list_mode_3">Mode 3</label>
+			<label index="back">Back</label>
+			<label index="submit_button_label">Click here to submit value</label>
+			<label index="error_image_size">Imaginea este prea mare. Mărimea maximă admisă a fiecărei imagini este de 1MB.</label>
+			<label index="wr_img_type">Acest fișier nu poate fi uploadat: </label>
+			<label index="error_image_type">Puteți uploada numai fișiere cu extensiile: </label>
+			<label index="no_title">Competați titlul.</label>
+			<label index="no_anunt">Alegeți tipul anunțului.</label>
+			<label index="no_categorie">Alegeți categoria.</label>
+			<label index="no_tip_anunt">Alegeți tipul anunțului.</label>
+			<label index="no_judet">Alegeți județul.</label>
+			<label index="no_localitate">Alegeți localitatea.</label>
+			<label index="no_pret">Introduceți prețul. Trebuie să fie mai mare decât zero.</label>
+			<label index="no_anunt">Introduceți textul anunțului.</label>			
+			<label index="no_good_captcha">Nu ați introdus corect codul de securitate.</label>
+			<label index="no_tip_anunt">Alegeți tipul anunțului.</label>
+			<label index="no_nume">Introduceți numele.</label>
+			<label index="no_email">Introduceți e-mailul.</label>
+			<label index="wrong_email">Introduceți o adresă validă de mail.</label>
+			<label index="no_telefon">Introduceți numărul de telefon.</label>
+			<label index="wrong_telefon">Numărul de telefon trebuie să conțină numai cifre, fără spații sau caractere speciale.</label>
+			<label index="id_localitate_invalid">ID-ul localitatii nu exista in baza de date: </label>
+			<label index="id_judet_invalid">ID-ul judetului nu exista in baza de date: </label>
+		</languageKey>
+	</data>
+</T3locallang>

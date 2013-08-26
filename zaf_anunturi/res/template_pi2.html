@@ -1,0 +1,82 @@
+<!--###THE_TITLE###-->
+<h1>Anunturi din ###ANUNT_DIN###</h1>
+<!--###THE_TITLE###-->
+
+<!--###FORMULAR_CAUTARE###-->
+<div class="formCautare">
+	<form method="get" action="###ACTION###">				
+		<input class="cauta" type="hidden" name="tx_zafanunturi_pi2[ordonare]" value="###ORDONARE###" />
+		<input class="cauta" type="text" name="tx_zafanunturi_pi2[src_word]" value="###SRC_WORD###" />
+		<select name="tx_zafanunturi_pi2[categorie]" class="filter categorii">
+			###CATEGORII###
+		</select>		
+		<select name="tx_zafanunturi_pi2[id_judet]" class="filter">
+			###JUDETE###
+		</select>
+		<input type="submit" value="Caută" class="search" />
+		<div class="clear"></div>
+	</form>
+</div>
+<!--###FORMULAR_CAUTARE###-->
+
+<!--###ORDER_BOX###-->
+<div class="ordonareList">
+<form method="get" action="###ACTION###" name="myform">
+	<input type="hidden" name="tx_zafanunturi_pi2[src_word]" value="###SRC_WORD###" />
+	<input type="hidden" name="tx_zafanunturi_pi2[id_judet]" value="###ID_JUDET###" />
+	<input type="hidden" name="tx_zafanunturi_pi2[page]" value="###PAGINA###" />
+	<input type="hidden" name="tx_zafanunturi_pi2[categorie]" value="###CATEGORIE###" />
+	
+	
+	<label>Ordonează după: </label>
+	<select name="tx_zafanunturi_pi2[ordonare]" onchange="document.forms['myform'].submit();">
+		###OPTIONS_ORDONARE###		
+	</select>	
+</form>
+</div>
+<!--###ORDER_BOX###-->
+
+<!--###ROW_ANUNT###-->
+<div class="oneRow ###GRAY###">
+<a href="###LINK_DETALII###">
+	<div class="data">
+		###DATA###<br />###ORA###
+	</div>
+	<div class="poza">
+		&nbsp;###POZA###
+	</div>
+	<div class="titlu">
+		<div class="titl">
+			###TITLU###
+		</div>
+		<div class="categorie">
+			###CATEGORIE###
+		</div>
+		<div class="localitate">
+			###TIP_ANUNT###
+		</div>
+		<div class="localitate">
+			ID: ###ID###
+		</div>	
+	</div>
+	<div class="pret">
+		###PRET###
+	</div>		
+	<div class="localitate">
+		###LOCALITATE###
+	</div>
+	<div class="clear"></div>
+</a>
+</div>
+<!--###ROW_ANUNT###-->
+
+
+<div class="paginationTeaserMenu">
+<!-- ###PAGINATION_HTML### -->
+	###FIRST### ###PREV###
+	<!-- ###PAGE### -->
+		###PAGE_LINK### ###SEPARATOR###
+	<!-- ###PAGE### -->
+	###NEXT### ###LAST###
+<!-- ###PAGINATION_HTML### -->
+</div>

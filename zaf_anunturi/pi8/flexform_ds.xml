@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<T3DataStructure>
+	<meta>
+		<langDisable>1</langDisable>
+		<langChildren>0</langChildren>		
+	</meta>	
+	<ROOT>				
+		<type>array</type>
+		<el>	
+		
+		<metoda_afisare>
+			<TCEforms>
+				<label>LLL:EXT:zaf_anunturi/locallang_db.xml:tx_zafanunturi_anunuri.metoda_afisare</label>
+				<exclude>0</exclude>
+		    		<config>        
+	                	<type>select</type>
+						<items type="array">							
+	                			
+	                		<numIndex index="1" type="array">
+            					<numIndex index="0">LLL:EXT:zaf_anunturi/locallang_db.xml:tx_zafanunturi_anunuri.metoda_afisare.I.0</numIndex>
+            					<numIndex index="1">1</numIndex>
+            				</numIndex>
+            				<numIndex index="2" type="array">
+            					<numIndex index="0">LLL:EXT:zaf_anunturi/locallang_db.xml:tx_zafanunturi_anunuri.metoda_afisare.I.1</numIndex>
+            					<numIndex index="1">2</numIndex>
+            				</numIndex>	
+	                		<numIndex index="3" type="array">
+            					<numIndex index="0">LLL:EXT:zaf_anunturi/locallang_db.xml:tx_zafanunturi_anunuri.metoda_afisare.I.2</numIndex>
+            					<numIndex index="1">3</numIndex>
+            				</numIndex>
+	                				                		
+	            		</items>
+	            		<size>1</size>
+	        			<maxitems>1</maxitems>
+					</config>        		
+			</TCEforms>
+		</metoda_afisare>	
+						
+		</el>
+	</ROOT>
+</T3DataStructure>
