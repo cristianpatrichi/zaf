@@ -1,3 +1,0 @@
-plugin.tx_zafanunturi_pi1 {
-  	templateFile = 
-}
